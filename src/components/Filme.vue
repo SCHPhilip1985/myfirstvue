@@ -1,8 +1,15 @@
 <script setup>
 import { ref } from 'vue';
 
-const movies=ref([])
+const moviesFromLS = JSON.parse(localStorage.getItem("movies"))
+console.log("moviesFromLS : ",moviesFromLS)
+const movies=ref(moviesFromLS||[])
 const movie = ref({})
+
+function storeMovie(){
+    movies.value.push(JSON.parse(JSON.stringify(movie.value)))
+    localStorage.setItem("movies", JSON.stringify(movies.value))
+}
 </script>
 
 <template>
@@ -15,7 +22,7 @@ const movie = ref({})
             <option value="Satire">Satire</option>
 
         </select>
-        <button @click.prevent="movies.push(JSON.parse(JSON.stringify(movie)))">Zur Collection hinzufügen</button>
+        <button @click.prevent="storeMovie()">Zur Collection hinzufügen</button>
     </form>
     <article>
         <div>
@@ -26,7 +33,7 @@ const movie = ref({})
                 Erscheinungsjahr
             </section>
             <section>
-                kategorie
+                Kategorie
             </section>
         </div>
         <div v-for="film in movies">
